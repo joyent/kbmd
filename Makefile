@@ -17,6 +17,7 @@ include		$(PWD)/../../../build.env
 
 STRAP_AREA =	$(PWD)/../../../proto.strap
 CC =		$(STRAP_AREA)/usr/bin/gcc
+CP =		/bin/cp
 AR =		/usr/bin/ar
 LN =		/bin/ln
 RM =		/bin/rm
@@ -25,7 +26,7 @@ PROTOINC =	$(DESTDIR)/usr/include
 INSTALL =	/usr/sbin/install
 ELFWRAP =	/usr/bin/elfwrap
 
-_PROGS =	kbmd kbmadm reset-piv
+_PROGS =	kbmd kbmadm reset-piv unlock
 _STATIC_LIBS =	common.a pivy.a
 
 PROGS =		$(_PROGS:%=out/%)
@@ -100,14 +101,14 @@ KBMD_LIBS =		\
 
 KBMD_DIR = /usr/lib/kbm
 KBMD_PLUGIN_DIR = $(KBMD_DIR)/plugins
-KBMD_PLUGINS = triton unlock kbm-plugin-1
+KBMD_PLUGINS = triton kbm-plugin-1
 
 out/kbmd:	LDLIBS += $(KBMD_LIBS)
 # For flockfile and funlockfile
 out/kbmd:	CPPFLAGS += -D__EXTENSIONS__ -D_REENTRANT
 
 _RESET_PIV_SRCS =	reset-piv.c
-RESET_PIV_SRCS =	$(_RESET_PIV_SRCS:%=reset-piv/%)
+RESET_PIV_SRCS =	$(_RESET_PIV_SRCS:%=util/%)
 RESET_PIV_OBJS =	$(RESET_PIV_SRCS:%.c=%.o) kbmd/piv-bunyan.o
 RESET_PIV_LIBS =	\
 	out/pivy.a	\
@@ -180,8 +181,9 @@ PIVY_A_OBJS =		\
 _DEST_PROGS =	/usr/sbin/pivy-tool \
 		/usr/sbin/pivy-box \
 		/usr/sbin/kbmadm \
-		/usr/sbin/reset-piv \
 		/usr/lib/kbm/kbmd \
+		/usr/lib/kbm/reset-piv \
+		/usr/lib/kbm/unlock \
 		/lib/svc/manifest/system/kbmd.xml \
 		/lib/svc/method/kbmd \
 		/usr/share/man/man1m/kbmd.1m \
@@ -297,6 +299,9 @@ $(DESTDIR)$(KBMD_PLUGIN_DIR)/kbm-plugin-1: $(DESTDIR)$(KBMD_PLUGIN_DIR)/triton
 
 
 install: all $(DEST_PROGS) $(DEST_DIRS) $(DEST_PLUGINS)
+
+out/unlock: util/unlock
+	$(CP) util/unlock $@
 
 manifest:
 	cp manifest $(DESTDIR)/$(DESTNAME)

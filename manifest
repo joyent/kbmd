@@ -3,12 +3,12 @@ f lib/svc/method/kbmd 0555 root bin
 f usr/sbin/pivy-tool 0555 root bin
 f usr/sbin/pivy-box 0555 root bin
 f usr/sbin/kbmadm 0555 root bin
-f usr/sbin/reset-piv 0555 root bin
 d usr/lib/kbm 0755 root bin
 d usr/lib/kbm/plugins 0755 root sys
 f usr/lib/kbm/kbmd 0555 root bin
 f usr/lib/kbm/plugins/triton 0555 root bin
 s usr/lib/kbm/plugins/kbm-plugin-1=triton
-f usr/lib/kbm/plugins/unlock 0555 root bin
+f usr/lib/kbm/reset-piv 0555 root bin
+f usr/lib/kbm/unlock 0555 root bin
 f usr/share/man/man1m/kbmd.1m 0444 root bin
 f usr/share/man/man1m/kbmadm.1m 0444 root bin
